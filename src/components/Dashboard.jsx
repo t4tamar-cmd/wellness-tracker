@@ -3,7 +3,9 @@ import StatsPanel from './StatsPanel'
 import FilterBar from './FilterBar'
 import AppCard from './AppCard'
 
-const API = '/api'
+const API = window.location.hostname === 'localhost'
+  ? '/api'
+  : 'https://wellness-tracker-production-9001.up.railway.app/api'
 
 export default function Dashboard() {
   const [companies, setCompanies] = useState([])
