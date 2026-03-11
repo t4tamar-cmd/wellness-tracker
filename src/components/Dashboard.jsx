@@ -52,8 +52,16 @@ export default function Dashboard() {
       const res = await fetch(`${API}/scan`, { method: 'POST' })
       if (!res.ok) throw new Error()
       setScanMsg('Scan started! Results will appear in a few minutes.')
-      // Poll for updates
-      setTimeout(() => { fetchData(); setScanning(false) }, 30000)
+      // Poll every 5s for up to 3 minutes
+      let attempts = 0
+      const interval = setInterval(async () => {
+        attempts++
+        await fetchData()
+        if (attempts >= 36) {
+          clearInterval(interval)
+          setScanning(false)
+        }
+      }, 5000)
     } catch {
       setScanMsg('Failed to start scan. Check your API keys in .env.')
       setScanning(false)
